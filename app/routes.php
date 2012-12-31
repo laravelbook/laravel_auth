@@ -15,7 +15,7 @@ Route::get('/', array('as' => 'home', function () {
     return View::make('home');
 }));
 
-Route::get('login', array('as' => 'login', function () {
+Route::get('login', array('as' => 'login', 'before' => 'guest', function () {
     if (Auth::check()) {
         return Redirect::route('home')
             ->with('flash_notice', 'You are successfully logged in.');
@@ -35,10 +35,11 @@ Route::post('login', function () {
     }
 
     return Redirect::route('login')
-        ->with('flash_error', 'Your username/password combination was incorrect.');
+        ->with('flash_error', 'Your username/password combination was incorrect.')
+        ->withInput();
 });
 
-Route::get('logout', array('as' => 'logout', function () {
+Route::get('logout', array('as' => 'logout', 'before' => 'auth', function () {
     Auth::logout();
     return Redirect::route('home')
         ->with('flash_notice', 'You are successfully logged out.');
