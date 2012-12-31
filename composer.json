@@ -1,0 +1,16 @@
+{
+	"require": {
+		"illuminate/foundation": "1.2.*",
+		"meido/form": "1.0.*",
+		"meido/html": "1.0.*"
+	},
+	"autoload": {
+		"classmap": [
+			"app/controllers",
+			"app/models",
+			"app/database/migrations",
+			"app/tests/TestCase.php"
+		]
+	},
+	"minimum-stability": "dev"
+}
