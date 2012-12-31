@@ -15,13 +15,13 @@ Route::get('/', array('as' => 'home', function () {
     return View::make('home');
 }));
 
-Route::get('login', array('as' => 'login', 'before' => 'guest', function () {
+Route::get('login', array('as' => 'login', function () {
     if (Auth::check()) {
         return Redirect::route('home')
             ->with('flash_notice', 'You are successfully logged in.');
     }
     return View::make('login');
-}));
+}))->before('guest');
 
 Route::post('login', function () {
     $user = array(
@@ -39,13 +39,13 @@ Route::post('login', function () {
         ->withInput();
 });
 
-Route::get('logout', array('as' => 'logout', 'before' => 'auth', function () {
+Route::get('logout', array('as' => 'logout', function () {
     Auth::logout();
     return Redirect::route('home')
         ->with('flash_notice', 'You are successfully logged out.');
-}));
+}))->before('auth');
 
-Route::get('profile', array('as' => 'profile', 'before' => 'auth', function () {
+Route::get('profile', array('as' => 'profile', function () {
     return View::make('profile')
         ->with('user', Auth::user());
-}));
+}))->before('auth');
