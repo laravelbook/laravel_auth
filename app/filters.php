@@ -44,7 +44,7 @@ Route::filter('auth', function()
 Route::filter('guest', function()
 {
 	if (Auth::check()) 
-		return Redirect::to('/')
+		return Redirect::route('home')
 				->with('flash_notice', 'You are already logged in!');
 });
 

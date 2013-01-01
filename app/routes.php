@@ -46,6 +46,5 @@ Route::get('logout', array('as' => 'logout', function () {
 }))->before('auth');
 
 Route::get('profile', array('as' => 'profile', function () {
-    return View::make('profile')
-        ->with('user', Auth::user());
+    return View::make('profile');
 }))->before('auth');
