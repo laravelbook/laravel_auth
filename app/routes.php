@@ -11,40 +11,61 @@
 |
 */
 
-Route::get('/', array('as' => 'home', function () {
+Route::any('home', function() {
+    
     return View::make('home');
-}));
+    
+    });
+
+Route::any('/', array('as' => 'home', function () {
+    
+    return View::make('home');
+    
+    }));
 
 Route::get('login', array('as' => 'login', function () {
-    if (Auth::check()) {
-        return Redirect::route('home')
-            ->with('flash_notice', 'You are successfully logged in.');
-    }
+    
     return View::make('login');
-}))->before('guest');
+    
+    }))->before('guest');
+
+# Got issues with, expected to work, beta
+/*Route::group(array('before' => 'guest'), function() {
+    Route::get(
+        'login', function() {
+            # Has Auth Filter
+            return View::make('login'); });
+    });*/
 
 Route::post('login', function () {
+    
     $user = array(
         'username' => Input::get('username'),
-        'password' => Input::get('password')
-    );
+        'password' => Input::get('password') );
 
     if (Auth::attempt($user)) {
         return Redirect::route('home')
-            ->with('flash_notice', 'You are successfully logged in.');
-    }
+            ->with('flash_notice', 'You are successfully logged in.'); }
 
+    # authentication failure! lets go back to the login page
     return Redirect::route('login')
         ->with('flash_error', 'Your username/password combination was incorrect.')
         ->withInput();
-});
+    
+    });
 
-Route::get('logout', array('as' => 'logout', function () {
-    Auth::logout();
-    return Redirect::route('home')
-        ->with('flash_notice', 'You are successfully logged out.');
-}))->before('auth');
+Route::group(array('before' => 'auth'), function() {
+    
+    Route::get(
+        'logout', function() {
+            # Has Auth Filter
+            Auth::logout();
+            return Redirect::route('login')
+                ->with('flash_notice', 'You are successfully logged out.'); });
 
-Route::get('profile', array('as' => 'profile', function () {
-    return View::make('profile');
-}))->before('auth');
+    Route::get(
+        'profile', function() {
+            # Has Auth Filter
+            return View::make('profile'); });
+    
+    });
